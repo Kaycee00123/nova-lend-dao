@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { Home, TrendingUp, DollarSign, Sprout, Vote, Settings } from "lucide-react";
+import { Home, TrendingUp, DollarSign, ArrowLeftRight, Sprout, Vote, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { to: "/dashboard", icon: Home, label: "Dashboard" },
   { to: "/lend", icon: TrendingUp, label: "Lend" },
   { to: "/borrow", icon: DollarSign, label: "Borrow" },
+  { to: "/swap", icon: ArrowLeftRight, label: "Swap" },
   { to: "/farm", icon: Sprout, label: "Farm" },
   { to: "/govern", icon: Vote, label: "Govern" },
   { to: "/settings", icon: Settings, label: "Settings" },
