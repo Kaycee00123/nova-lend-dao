@@ -6,7 +6,8 @@ import { WagmiProvider } from 'wagmi'
 import type { AppKitNetwork } from '@reown/appkit/networks'
 
 // 1. Get projectId from https://cloud.reown.com
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'demo-project-id'
+// You need to create a free account at https://cloud.reown.com and get your project ID
+const projectId = 'YOUR_PROJECT_ID_HERE' // Replace with your actual Reown/WalletConnect project ID
 
 // 2. Set up Wagmi adapter with Sepolia and Base chains
 const networks = [sepolia, base] as [AppKitNetwork, ...AppKitNetwork[]]
@@ -25,12 +26,17 @@ createAppKit({
   metadata: {
     name: 'NovaLend',
     description: 'Next-Generation DeFi Lending Protocol',
-    url: 'https://novalend.app',
+    url: window.location.origin,
     icons: ['https://avatars.githubusercontent.com/u/37784886']
   },
   features: {
-    analytics: false
+    analytics: false,
+    email: false,
+    socials: [],
+    onramp: false
   },
+  allowUnsupportedChain: false,
+  allWallets: 'SHOW',
   themeMode: 'dark',
   themeVariables: {
     '--w3m-color-mix': '#90EE90',
