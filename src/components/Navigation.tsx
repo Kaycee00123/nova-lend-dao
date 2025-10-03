@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { Home, TrendingUp, DollarSign, ArrowLeftRight, Sprout, Vote, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { WalletConnect } from "./WalletConnect";
 
 const navItems = [
   { to: "/dashboard", icon: Home, label: "Dashboard" },
@@ -15,13 +16,19 @@ const navItems = [
 export function Navigation() {
   return (
     <>
-      {/* Desktop Sidebar */}
-      <nav className="hidden md:flex fixed left-0 top-0 h-screen w-20 flex-col items-center gap-6 border-r border-border bg-card py-8 z-50">
-        <div className="mb-8">
+      {/* Top Header with Wallet */}
+      <header className="hidden md:flex fixed top-0 left-0 right-0 h-16 bg-card border-b border-border items-center justify-between px-6 z-50">
+        <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent to-primary flex items-center justify-center font-bold text-xl">
             N
           </div>
+          <span className="text-xl font-bold gradient-text">NovaLend</span>
         </div>
+        <WalletConnect />
+      </header>
+
+      {/* Desktop Sidebar */}
+      <nav className="hidden md:flex fixed left-0 top-16 h-[calc(100vh-4rem)] w-20 flex-col items-center gap-6 border-r border-border bg-card py-8 z-40">
         {navItems.map((item) => (
           <NavLink
             key={item.to}
@@ -40,6 +47,17 @@ export function Navigation() {
           </NavLink>
         ))}
       </nav>
+
+      {/* Mobile Top Header */}
+      <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-card border-b border-border flex items-center justify-between px-4 z-50">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-primary flex items-center justify-center font-bold text-sm">
+            N
+          </div>
+          <span className="font-bold gradient-text">NovaLend</span>
+        </div>
+        <WalletConnect />
+      </header>
 
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border flex items-center justify-around px-2 z-50">

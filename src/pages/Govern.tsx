@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Vote, Clock, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useGovernance } from "@/hooks/useContracts";
+import { useAccount } from "wagmi";
 
 const proposals = [
   {
@@ -52,11 +55,26 @@ const proposals = [
 ];
 
 export default function Govern() {
+  const { address, isConnected } = useAccount();
+  const { vote, votingPower } = useGovernance();
+  const [isVoting, setIsVoting] = useState(false);
   const protoBalance = 142.8;
-  const votingPower = 142.8;
 
-  const handleVote = (proposalId: number, vote: "for" | "against") => {
-    toast.success(`Voted ${vote === "for" ? "FOR" : "AGAINST"} proposal #${proposalId}`);
+  const handleVote = async (proposalId: number, voteFor: "for" | "against") => {
+    if (!isConnected) {
+      toast.error("Please connect your wallet to vote");
+      return;
+    }
+    
+    setIsVoting(true);
+    try {
+      await vote(proposalId, voteFor === "for");
+      toast.success(`Voted ${voteFor === "for" ? "FOR" : "AGAINST"} on proposal #${proposalId}!`);
+    } catch (error) {
+      console.error("Vote error:", error);
+    } finally {
+      setIsVoting(false);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -75,7 +93,7 @@ export default function Govern() {
   };
 
   return (
-    <div className="min-h-screen md:pl-20 pb-20 md:pb-8">
+    <div className="min-h-screen md:pl-20 pb-20 md:pb-8 pt-4">
       <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -88,7 +106,9 @@ export default function Govern() {
               <Vote className="w-8 h-8 text-primary" />
               <div>
                 <p className="text-sm text-muted-foreground">Your Voting Power</p>
-                <p className="text-2xl font-bold text-primary">{votingPower} PROTO</p>
+                <p className="text-2xl font-bold text-primary">
+                  {isConnected ? `${parseFloat(votingPower).toFixed(2)} PROTO` : '0 PROTO'}
+                </p>
               </div>
             </div>
           </Card>
@@ -200,18 +220,20 @@ export default function Govern() {
                     <div className="flex gap-3 pt-2">
                       <Button
                         onClick={() => handleVote(proposal.id, "for")}
-                        className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 glow-primary"
+                        disabled={!isConnected || isVoting}
+                        className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 glow-primary disabled:opacity-50"
                       >
                         <CheckCircle2 className="w-4 h-4 mr-2" />
-                        Vote For
+                        {isVoting ? "Voting..." : "Vote For"}
                       </Button>
                       <Button
                         onClick={() => handleVote(proposal.id, "against")}
+                        disabled={!isConnected || isVoting}
                         variant="outline"
-                        className="flex-1 border-destructive/20 text-destructive hover:bg-destructive/10"
+                        className="flex-1 border-destructive/20 text-destructive hover:bg-destructive/10 disabled:opacity-50"
                       >
                         <XCircle className="w-4 h-4 mr-2" />
-                        Vote Against
+                        {isVoting ? "Voting..." : "Vote Against"}
                       </Button>
                     </div>
                   )}

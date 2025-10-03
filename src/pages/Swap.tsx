@@ -42,7 +42,7 @@ export default function Swap() {
   const selectedToAsset = assets.find(a => a.symbol === toAsset);
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8 pb-24 md:pb-8">
+    <div className="min-h-screen bg-background md:pl-20 p-4 md:p-8 pb-24 md:pb-8 pt-20 md:pt-4">
       <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
         <div>
           <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-2">Swap Assets</h1>
